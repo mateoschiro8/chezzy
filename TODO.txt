@@ -1,0 +1,8 @@
+COSAS PARA HACER:
+
+1) Seguir con los movimientos:
+    Función movValidoEnTablero, que sabiendo que la semántica del movimiento es correcta, se fija   
+    si ese movimiento es válido en el movValidoEnTablero
+    Hacer casos especificos para los enroques y las capturas al paso
+
+2) Acomodar la bienvenida que parece una ensalada césar
