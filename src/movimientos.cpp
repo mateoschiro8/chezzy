@@ -53,6 +53,7 @@ void Tablero::obtenerMovimiento() {
         filaOrigen = filaTmpOrigen - '0';
         
 
+
         if (columnaTmpDestino >= 'A' && columnaTmpDestino <= 'Z') 
             columnaDestino = columnaTmpDestino - 'A' + 1;
         else
@@ -68,8 +69,6 @@ void Tablero::obtenerMovimiento() {
         }
 
         valido = true;
-        
-
     }
 
     mover(columnaOrigen, filaOrigen, columnaDestino, filaDestino);
@@ -82,27 +81,30 @@ void Tablero::mover(int columnaOrigen, int filaOrigen, int columnaDestino, int f
     uint64_t mascaraOrigen = 1ULL << 8 * (filaOrigen - 1) + (8 - columnaOrigen);
     uint64_t mascaraDestino = 1ULL << 8 * (filaDestino - 1) + (8 - columnaDestino);
 
+    uint64_t notMascaraOrigen = ~mascaraOrigen;
+    uint64_t notMascaraDestino = ~mascaraDestino;
+
+
+
+
     // Saco la pieza del lugar de destino (en caso de captura)
-    mascaraDestino = ~mascaraDestino;
+    peonesBlancos   = peonesBlancos & notMascaraDestino;
+    caballosBlancos = caballosBlancos & notMascaraDestino;
+    alfilesBlancos  = alfilesBlancos & notMascaraDestino;
+    torresBlancas   = torresBlancas & notMascaraDestino;
+    reinaBlanca     = reinaBlanca & notMascaraDestino;
+    reyBlanco       = reyBlanco & notMascaraDestino;
 
-    peonesBlancos   = peonesBlancos & mascaraDestino;
-    caballosBlancos = caballosBlancos & mascaraDestino;
-    alfilesBlancos  = alfilesBlancos & mascaraDestino;
-    torresBlancas   = torresBlancas & mascaraDestino;
-    reinaBlanca     = reinaBlanca & mascaraDestino;
-    reyBlanco       = reyBlanco & mascaraDestino;
+    peonesNegros   = peonesNegros & notMascaraDestino;
+    caballosNegros = caballosNegros & notMascaraDestino;
+    alfilesNegros  = alfilesNegros & notMascaraDestino;
+    torresNegras   = torresNegras & notMascaraDestino;
+    reinaNegra     = reinaNegra & notMascaraDestino;
+    reyNegro       = reyNegro & notMascaraDestino;
 
-    peonesNegros   = peonesNegros & mascaraDestino;
-    caballosNegros = caballosNegros & mascaraDestino;
-    alfilesNegros  = alfilesNegros & mascaraDestino;
-    torresNegras   = torresNegras & mascaraDestino;
-    reinaNegra     = reinaNegra & mascaraDestino;
-    reyNegro       = reyNegro & mascaraDestino;
-
-    mascaraDestino = ~mascaraDestino;
-
+    
     // Pongo la pieza en el lugar de destino
-    if((peonesBlancos & mascaraOrigen) != 0) 
+    if((peonesBlancos & mascaraOrigen)) 
         peonesBlancos = peonesBlancos | mascaraDestino;
 
     else if((caballosBlancos & mascaraOrigen) != 0)
@@ -140,158 +142,18 @@ void Tablero::mover(int columnaOrigen, int filaOrigen, int columnaDestino, int f
 
 
     // Borro la pieza del lugar original
-    mascaraOrigen = ~mascaraOrigen;
-    
-    peonesBlancos   = peonesBlancos & mascaraOrigen;
-    caballosBlancos = caballosBlancos & mascaraOrigen;
-    alfilesBlancos  = alfilesBlancos & mascaraOrigen;
-    torresBlancas   = torresBlancas & mascaraOrigen;
-    reinaBlanca     = reinaBlanca & mascaraOrigen;
-    reyBlanco       = reyBlanco & mascaraOrigen;
+    peonesBlancos   = peonesBlancos & notMascaraOrigen;
+    caballosBlancos = caballosBlancos & notMascaraOrigen;
+    alfilesBlancos  = alfilesBlancos & notMascaraOrigen;
+    torresBlancas   = torresBlancas & notMascaraOrigen;
+    reinaBlanca     = reinaBlanca & notMascaraOrigen;
+    reyBlanco       = reyBlanco & notMascaraOrigen;
 
-    peonesNegros   = peonesNegros & mascaraOrigen;
-    caballosNegros = caballosNegros & mascaraOrigen;
-    alfilesNegros  = alfilesNegros & mascaraOrigen;
-    torresNegras   = torresNegras & mascaraOrigen;
-    reinaNegra     = reinaNegra & mascaraOrigen;
-    reyNegro       = reyNegro & mascaraOrigen;
+    peonesNegros   = peonesNegros & notMascaraOrigen;
+    caballosNegros = caballosNegros & notMascaraOrigen;
+    alfilesNegros  = alfilesNegros & notMascaraOrigen;
+    torresNegras   = torresNegras & notMascaraOrigen;
+    reinaNegra     = reinaNegra & notMascaraOrigen;
+    reyNegro       = reyNegro & notMascaraOrigen;
 
-    /*
-    if(usuarioEsBlanco) {
-
-        // Si el usuario juega con blanco       
-
-        if((peonesBlancos & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            peonesBlancos = peonesBlancos & mascaraOrigen;
-
-            // La pongo donde va
-            peonesBlancos = peonesBlancos | mascaraDestino;
-        }
-
-        else if((caballosBlancos & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            caballosBlancos = caballosBlancos & mascaraOrigen;
-
-            // La pongo donde va
-            caballosBlancos = caballosBlancos | mascaraDestino;
-        }
-
-        else if((alfilesBlancos & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            alfilesBlancos = alfilesBlancos & mascaraOrigen;
-
-            // La pongo donde va
-            alfilesBlancos = alfilesBlancos | mascaraDestino;
-        }
-
-        else if((torresBlancas & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            torresBlancas = torresBlancas & mascaraOrigen;
-
-            // La pongo donde va
-            torresBlancas = torresBlancas | mascaraDestino;
-        }
-            
-        else if((reinaBlanca & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            reinaBlanca = reinaBlanca & mascaraOrigen;
-
-            // La pongo donde va
-            reinaBlanca = reinaBlanca | mascaraDestino;
-        }
-            
-        else if((reyBlanco & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            reyBlanco = reyBlanco & mascaraOrigen;
-
-            // La pongo donde va
-            reyBlanco = reyBlanco | mascaraDestino;
-        }
-            
-        // Saco la pieza del otro color que hay en su lugar
-        mascaraDestino = ~mascaraDestino;
-        peonesNegros   = peonesNegros & mascaraDestino;
-        caballosNegros = caballosNegros & mascaraDestino;
-        alfilesNegros  = alfilesNegros & mascaraDestino;
-        torresNegras   = torresNegras & mascaraDestino;
-        reinaNegra     = reinaNegra & mascaraDestino;
-        reyNegro       = reyNegro & mascaraDestino;
-
-    }
-    else {
-
-        // Si el usuario juega con negro
-
-        if((peonesNegros & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            peonesNegros = peonesNegros & mascaraOrigen;
-
-            // La pongo donde va
-            peonesNegros = peonesNegros | mascaraDestino;
-        }
-
-        else if((caballosNegros & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            caballosNegros = caballosNegros & mascaraOrigen;
-
-            // La pongo donde va
-            caballosNegros = caballosNegros | mascaraDestino;
-        }
-
-        else if((alfilesNegros & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            alfilesNegros = alfilesNegros & mascaraOrigen;
-
-            // La pongo donde va
-            alfilesNegros = alfilesNegros | mascaraDestino;
-        }
-
-        else if((torresNegras & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            torresNegras = torresNegras & mascaraOrigen;
-
-            // La pongo donde va
-            torresNegras = torresNegras | mascaraDestino;
-        }
-            
-        else if((reinaNegra & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            reinaNegra = reinaNegra & mascaraOrigen;
-
-            // La pongo donde va
-            reinaNegra = reinaNegra | mascaraDestino;
-        }
-            
-        else if((reyNegro & mascaraOrigen) != 0) {
-            // Borro la pieza del lugar original
-            mascaraOrigen = ~mascaraOrigen;
-            reyNegro = reyNegro & mascaraOrigen;
-
-            // La pongo donde va
-            reyNegro = reyNegro | mascaraDestino;
-        }
-            
-        // Saco la pieza del otro color que hay en su lugar
-        mascaraDestino = ~mascaraDestino;
-        peonesBlancos   = peonesBlancos & mascaraDestino;
-        caballosBlancos = caballosBlancos & mascaraDestino;
-        alfilesBlancos  = alfilesBlancos & mascaraDestino;
-        torresBlancas   = torresBlancas & mascaraDestino;
-        reinaBlanca     = reinaBlanca & mascaraDestino;
-        reyBlanco       = reyBlanco & mascaraDestino;
-
-    }
-    */
 }

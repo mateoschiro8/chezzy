@@ -4,5 +4,6 @@ COSAS PARA HACER:
     Función movValidoEnTablero, que sabiendo que la semántica del movimiento es correcta, se fija   
     si ese movimiento es válido en el movValidoEnTablero
     Hacer casos especificos para los enroques y las capturas al paso
+    Acomodar el espacio al recibir un movimiento (permitir que esté y que no esté)
 
 2) Acomodar la bienvenida que parece una ensalada césar

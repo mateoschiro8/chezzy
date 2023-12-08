@@ -56,9 +56,7 @@ class Tablero {
         bool juegaUsuario;
         bool usuarioEsBlanco;
 
-        int estadoJuego;  // 0 si no quiere jugar más, 1 si juega el usuario, 2 si ganó blanco, 3 si ganó negro
-
-    
+        int estadoJuego;  // 0 si el juego está en progreso, 1 si no quiere jugar más, 2 si ganó blanco, 3 si ganó negro
 
 }; 
 

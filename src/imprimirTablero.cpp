@@ -43,11 +43,11 @@ void Tablero::imprimirBienvenida() {
             }
 
             if(input == 'B' || input == 'b') {
-                estadoJuego = 1;
+                estadoJuego = 0;
                 usuarioEsBlanco = true;
 
             } else if(input == 'N' || input == 'n') {
-                estadoJuego = 1;
+                estadoJuego = 0;
                 usuarioEsBlanco = false;
             } 
             valido = true;
@@ -61,7 +61,7 @@ void Tablero::imprimirBienvenida() {
         }
 
         else if(input == 'Q' || input == 'q') {
-            estadoJuego = 0;
+            estadoJuego = 1;
             valido = true;
         }
 
@@ -134,8 +134,8 @@ void Tablero::imprimirTablero() {
         int fila = 1;
         for(int i = 63; i >= 0; i--) {
             // Creo una máscara con un 1 en la posición del bit que quiero verificar
-            uint64_t mascara = 1ULL << 64 - i - 1;
-
+            uint64_t mascara = 1ULL << 63 - i;
+         
             // Piezas blancas
             if (peonesBlancos & mascara)
                 cout << " P";
@@ -165,7 +165,7 @@ void Tablero::imprimirTablero() {
                 cout << " k";
 
             else
-                cout << " *";
+                cout << " .";
 
             // Cada 8 piezas, salto de linea
             if(i % 8 == 0) {

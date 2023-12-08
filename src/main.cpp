@@ -1,4 +1,4 @@
-// COMPILAR Y EJECUTAR DESDE AFUERA DE SRC CON    g++ src/*.cpp -o main && ./main
+// COMPILAR Y EJECUTAR DESDE AFUERA DE SRC CON    g++ src/*.cpp -o main   ->   ./main
 
 #include <iostream>
 #include "tablero.h"
@@ -11,11 +11,11 @@ int main() {
 
     tab.imprimirBienvenida();
 
-    while(true)
+    while(!tab.estado())
         tab.obtenerMovimiento();
         
   
 
-    // cout << "Gracias por jugar!" << endl << endl;
+    cout << "Gracias por jugar!" << endl << endl;
 
 }
