@@ -8,4 +8,4 @@ COSAS PARA HACER:
 
 2) Acomodar la bienvenida que parece una ensalada césar
 
-3) Sistema de guardado y carga de partidas 
+
