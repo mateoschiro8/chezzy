@@ -14,8 +14,9 @@ int main() {
     while(!tab.estado())
         tab.obtenerMovimiento();
         
-  
-
-    cout << "Gracias por jugar!" << endl << endl;
+    // tab.guardarPartida();
+    // tab.cargarPartida();
+    // tab.imprimirTablero();
+    // cout << "Gracias por jugar!" << endl << endl;
 
 }

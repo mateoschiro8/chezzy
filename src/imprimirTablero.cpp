@@ -54,9 +54,8 @@ void Tablero::imprimirBienvenida() {
 
         } else if(input == 'L' || input == 'l') {
             limpiarPantalla();
-            cout << "Cargar partida" << endl;
-            cout << "Todavía no sabemos como guardarlas pero algún día vamos a saber" << endl;
             cargarPartida();
+            estadoJuego = 0;
             valido = true;
         }
 
