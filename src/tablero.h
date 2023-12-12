@@ -35,7 +35,10 @@ class Tablero {
         // Estado del juego
         int estado() { return estadoJuego; }
 
+        // Dada una posición, devuelve qué hay en esa posición
+        char quePiezaEs(int fila, int columna);
 
+        bool movValidoEnTablero(int columnaOrigen, int filaOrigen, int columnaDestino, int filaDestino);
 
 
     private:
