@@ -38,6 +38,7 @@ class Tablero {
         // Dada una posición, devuelve qué hay en esa posición
         char quePiezaEs(int fila, int columna);
 
+        // Si un movimiento es válido en el tablero
         bool movValidoEnTablero(int columnaOrigen, int filaOrigen, int columnaDestino, int filaDestino);
 
 
