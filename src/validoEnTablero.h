@@ -1,5 +1,11 @@
 
+char quePiezaEs(int columna, int fila) {
 
+    uint64_t mascaraOrigen = 1ULL << 8 * (fila - 1) + (8 - columna);
+
+    
+
+}
 // Si un movimiento es válido en el tablero
 bool movValidoEnTablero(int columnaOrigen, int filaOrigen, int columnaDestino, int filaDestino) {
 

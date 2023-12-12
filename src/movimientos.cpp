@@ -1,6 +1,7 @@
 #include "tablero.h"
 #include "validoEnTablero.h"
 
+
 #include <string>
 
 using namespace std;

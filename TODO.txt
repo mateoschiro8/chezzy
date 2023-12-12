@@ -3,6 +3,7 @@ COSAS PARA HACER:
 1) Seguir con los movimientos:
     Función movValidoEnTablero, que sabiendo que la semántica del movimiento es correcta, se fija   
     si ese movimiento es válido 
+    Función esAmenazada
     Hacer casos especificos para los enroques y las capturas al paso
     Acomodar el espacio al recibir un movimiento (permitir que esté y que no esté)
 

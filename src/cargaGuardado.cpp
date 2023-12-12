@@ -91,8 +91,6 @@ void Tablero::cargarPartida() {
 
                 switch(pieza) {
 
-
-
                     // Piezas blancas
                     case 'P':
                         peonesBlancos |= mascara;

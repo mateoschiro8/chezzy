@@ -28,6 +28,9 @@ class Tablero {
         void guardarPartida();
         void cargarPartida();
 
+        // Dada una casilla, devuelve si es amenzada por el equipo del booleano color
+        // (false si es amenazada por blanco, true si es amenaza por negro)
+        bool esAmenazada(int fila, int columna, bool color);
         
         // Estado del juego
         int estado() { return estadoJuego; }
