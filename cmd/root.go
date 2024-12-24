@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"chezzy/engine"
 	"fmt"
 	"os"
 	"os/exec"
@@ -29,18 +30,22 @@ func HandleCMD() {
 		return
 	}
 
-	fmt.Println(os.Args[1:])
+	// fmt.Println(os.Args[1:])
 
-	// Lee el comando principal
 	command := os.Args[1]
-
-	// Lee los argumentos adicionales (opciones)
 	// args := os.Args[2:]
 
-	// Procesa el comando
+	board := engine.Board{}
+
 	switch command {
 	case "help":
 		printHelp()
+	case "m":
+
+	case "n":
+
+	case "s":
+		board.LoadAndShow()
 	default:
 		fmt.Printf("Comando desconocido: %s\n", command)
 		printHelp()
