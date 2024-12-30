@@ -16,26 +16,20 @@ type Bitboard uint64
 const FullBB Bitboard = 0xffffffffffffffff
 const EmptyBB Bitboard = 0x0
 
-// A global constant where each entry represents a square on the chess board,
-// and each entry contains a bitboard with the bit set high at that square.
-// An extra entry is given so that the invalid square constant NoSq can be
-// indexed into the table without the program crashing.
-var SquareBB [65]Bitboard
-
 // Set the bit at given square.
 func (bitboard *Bitboard) SetBit(sq uint8) {
-	*bitboard |= SquareBB[sq]
+	*bitboard |= 0x8000000000000000 >> sq
 }
 
 // Clear the bit at given square.
 func (bitboard *Bitboard) ClearBit(sq uint8) {
-	*bitboard &= ^SquareBB[sq]
+	*bitboard &= 0x8000000000000000 >> sq
 }
 
 // Test whether the bit of the given bitbord at the given
 // position is set.
 func (bb Bitboard) BitSet(sq uint8) bool {
-	return (bb & SquareBB[sq]) != 0
+	return (bb & (0x8000000000000000 >> sq)) != 0
 }
 
 // Get the position of the MSB of the given bitboard.
@@ -77,12 +71,4 @@ func (bitboard Bitboard) String() (bitboardAsString string) {
 	bitboardAsString += "\n    a b c d e f g h"
 	bitboardAsString += "\n"
 	return bitboardAsString
-}
-
-// Initalize the bitboard constants.
-func InitBitboards() {
-	var sq uint8
-	for sq = 0; sq < 65; sq++ {
-		SquareBB[sq] = 0x8000000000000000 >> sq
-	}
 }

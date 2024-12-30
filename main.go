@@ -1,8 +1,6 @@
 package main
 
-import (
-	"chezzy/cmd"
-)
+import "chezzy/cmd"
 
 func main() {
 	cmd.HandleCMD()

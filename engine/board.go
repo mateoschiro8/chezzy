@@ -1,17 +1,15 @@
 package engine
 
+// El tablero, junta toda la información de la partida y se interactúa con él
+
 import (
 	"fmt"
 )
 
 type Board struct {
-	// Pawn, Rook, Knight, Bishop, Queen, King
-	wP, wR, wK, wB, wQ, wKn Bitboard
-	bP, bR, bK, bB, bQ, bKn Bitboard
-}
-
-func (board *Board) LoadAndShow() {
-	fmt.Println("ESTA HAY QUE HACERLA PARA QUE CARGUE LA PARTIDA Y LA MUESTRE")
+	// Pawn, Rook, kNight, Bishop, Queen, King
+	wP, wR, wN, wB, wQ, wK Bitboard
+	bP, bR, bN, bB, bQ, bK Bitboard
 }
 
 func (board *Board) ShowBoard() {
@@ -20,7 +18,7 @@ func (board *Board) ShowBoard() {
 	for i := 8; i > 0; i-- {
 		boardAsString += fmt.Sprintf("%v | ", i)
 		for j := 0; j < 8; j++ {
-			boardAsString += board.pieceAt(8*(i-1)+j) + " "
+			boardAsString += board.pieceAt(uint8(8*(i-1)+j)) + " "
 		}
 		boardAsString += "\n"
 	}
@@ -30,65 +28,53 @@ func (board *Board) ShowBoard() {
 	fmt.Print(boardAsString)
 }
 
-func (board *Board) pieceAt(pos int) string {
+func (board *Board) pieceAt(pos uint8) string {
 
 	// White
-	if board.wP.BitSet(uint8(pos)) {
+	if board.wP.BitSet(pos) {
 		return "P"
 	}
-	if board.wR.BitSet(uint8(pos)) {
+	if board.wR.BitSet(pos) {
 		return "R"
 	}
-	if board.wK.BitSet(uint8(pos)) {
-		return "K"
+	if board.wN.BitSet(pos) {
+		return "N"
 	}
-	if board.wB.BitSet(uint8(pos)) {
+	if board.wB.BitSet(pos) {
 		return "B"
 	}
-	if board.wQ.BitSet(uint8(pos)) {
+	if board.wQ.BitSet(pos) {
 		return "Q"
 	}
-	if board.wKn.BitSet(uint8(pos)) {
-		return "X"
+	if board.wK.BitSet(pos) {
+		return "K"
 	}
 
 	// Black
-	if board.bP.BitSet(uint8(pos)) {
+	if board.bP.BitSet(pos) {
 		return "p"
 	}
-	if board.bR.BitSet(uint8(pos)) {
+	if board.bR.BitSet(pos) {
 		return "r"
 	}
-	if board.bK.BitSet(uint8(pos)) {
-		return "k"
+	if board.bN.BitSet(pos) {
+		return "n"
 	}
-	if board.bB.BitSet(uint8(pos)) {
+	if board.bB.BitSet(pos) {
 		return "b"
 	}
-	if board.bQ.BitSet(uint8(pos)) {
+	if board.bQ.BitSet(pos) {
 		return "q"
 	}
-	if board.bKn.BitSet(uint8(pos)) {
-		return "x"
+	if board.bK.BitSet(pos) {
+		return "k"
 	}
 
 	return "."
 }
 
 func (board *Board) Init() {
-	board.wP = 0b0000000011111111000000000000000000000000000000000000000000000000
-	board.wR = 0b1000000100000000000000000000000000000000000000000000000000000000
-	board.wK = 0b0100001000000000000000000000000000000000000000000000000000000000
-	board.wB = 0b0010010000000000000000000000000000000000000000000000000000000000
-	board.wQ = 0b0001000000000000000000000000000000000000000000000000000000000000
-	board.wKn = 0b0000100000000000000000000000000000000000000000000000000000000000
 
-	board.bP = 0b0000000000000000000000000000000000000000000000001111111100000000
-	board.bR = 0b0000000000000000000000000000000000000000000000000000000010000001
-	board.bK = 0b0000000000000000000000000000000000000000000000000000000001000010
-	board.bB = 0b0000000000000000000000000000000000000000000000000000000000100100
-	board.bQ = 0b0000000000000000000000000000000000000000000000000000000000010000
-	board.bKn = 0b0000000000000000000000000000000000000000000000000000000000001000
-
-	InitBitboards()
+	loadGame(board)
+	// saveGame(board)
 }
