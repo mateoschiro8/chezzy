@@ -18,7 +18,10 @@ func saveGame(board *Board) {
 			if piece == "." {
 				emptySpaces++
 			} else {
-				fenString += fmt.Sprint(emptySpaces) + piece
+				if emptySpaces != 0 {
+					fenString += fmt.Sprint(emptySpaces)
+				}
+				fenString += piece
 				emptySpaces = 0
 			}
 		}
@@ -28,6 +31,7 @@ func saveGame(board *Board) {
 		}
 		fenString += "/"
 	}
+	fenString = fenString[:len(fenString)-1]
 	fmt.Println(fenString)
 }
 

@@ -16,14 +16,14 @@ func (board *Board) ShowBoard() {
 
 	boardAsString := "\n"
 	for i := 8; i > 0; i-- {
-		boardAsString += fmt.Sprintf("%v | ", i)
+		boardAsString += fmt.Sprintf(" %v | ", i)
 		for j := 0; j < 8; j++ {
 			boardAsString += board.pieceAt(uint8(8*(i-1)+j)) + " "
 		}
 		boardAsString += "\n"
 	}
-	boardAsString += "   ----------------"
-	boardAsString += "\n    a b c d e f g h"
+	boardAsString += "    ----------------"
+	boardAsString += "\n     a b c d e f g h"
 	boardAsString += "\n \n"
 	fmt.Print(boardAsString)
 }
