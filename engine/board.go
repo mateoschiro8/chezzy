@@ -10,9 +10,13 @@ type Board struct {
 	// Pawn, Rook, kNight, Bishop, Queen, King
 	wP, wR, wN, wB, wQ, wK Bitboard
 	bP, bR, bN, bB, bQ, bK Bitboard
+
+	wPieces, bPieces Bitboard
 }
 
 func (board *Board) ShowBoard() {
+
+	LoadGame(board)
 
 	boardAsString := "\n"
 	for i := 8; i > 0; i-- {
@@ -75,6 +79,6 @@ func (board *Board) pieceAt(pos uint8) string {
 
 func (board *Board) Init() {
 
-	loadGame(board)
+	LoadGame(board)
 	// saveGame(board)
 }

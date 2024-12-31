@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 )
 
 // ClearScreen limpia la terminal
@@ -16,7 +17,7 @@ func ClearScreen() {
 		cmd.Stdout = os.Stdout
 		cmd.Run()
 	default: // Linux o MacOS
-		cmd := exec.Command("clear") //Linux example, its tested
+		cmd := exec.Command("clear")
 		cmd.Stdout = os.Stdout
 		cmd.Run()
 	}
@@ -35,7 +36,7 @@ func HandleCMD() {
 	// fmt.Println(os.Args[1:])
 
 	command := os.Args[1]
-	// args := os.Args[2:]
+	args := os.Args[2:]
 
 	board := engine.Board{}
 	board.Init()
@@ -44,10 +45,14 @@ func HandleCMD() {
 	case "help":
 		printHelp()
 	case "m":
-
+		engine.DecodeMove(&board, args[0])
 	case "n":
-
+		engine.SaveGame(&board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+		board.ShowBoard()
 	case "s":
+		board.ShowBoard()
+	case "l":
+		engine.SaveGame(&board, strings.Join(args, " "))
 		board.ShowBoard()
 	default:
 		fmt.Printf(" Comando desconocido: %s\n", command)

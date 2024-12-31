@@ -8,7 +8,8 @@ import (
 
 // Funciones para guardar y cargar partidas
 
-func saveGame(board *Board) {
+func SaveGame(board *Board, fen string) {
+	fmt.Println("FEN: ", fen)
 	fenString := ""
 	emptySpaces := 0
 	for i := 0; i < 8; i++ {
@@ -32,18 +33,26 @@ func saveGame(board *Board) {
 		fenString += "/"
 	}
 	fenString = fenString[:len(fenString)-1]
-	fmt.Println(fenString)
+	// fmt.Println(fenString)
+
+	if len(fen) > 0 {
+		fenString = fen
+	}
+
+	err := os.WriteFile("save.fen", []byte(fenString), 0755)
+	if err != nil {
+		fmt.Printf("unable to write file: %w", err)
+	}
+
 }
 
-func loadGame(board *Board) {
+func LoadGame(board *Board) {
 	dat, _ := os.ReadFile("save.fen")
 	save := string(dat)
 
 	pcs, info, _ := strings.Cut(save, " ")
 
-	fmt.Println(pcs)
-	fmt.Println(info)
-
+	info += "BASATA"
 	pieces := strings.Split(pcs, "/")
 
 	for i, v := range pieces {
@@ -80,7 +89,9 @@ func loadGame(board *Board) {
 		}
 
 	}
-	saveGame(board)
+
+	board.wPieces = board.wP | board.wR | board.wN | board.wB | board.wQ | board.wK
+	board.bPieces = board.bP | board.bR | board.bN | board.bB | board.bQ | board.bK
 }
 
 func fillSquares(file string) string {
