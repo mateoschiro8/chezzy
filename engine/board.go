@@ -6,11 +6,15 @@ import (
 	"fmt"
 )
 
+var pieces = [13]string{"P", "R", "N", "B", "Q", "K",
+	"p", "r", "n", "b", "q", "k"}
+
+// var whitePieces = [13]string{"P", "R", "N", "B", "Q", "K"}
+// var blackPieces = [13]string{"p", "r", "n", "b", "q", "k"}
+
 type Board struct {
 	// Pawn, Rook, kNight, Bishop, Queen, King
-	wP, wR, wN, wB, wQ, wK Bitboard
-	bP, bR, bN, bB, bQ, bK Bitboard
-
+	pcs              map[string]*Bitboard
 	wPieces, bPieces Bitboard
 }
 
@@ -34,51 +38,31 @@ func (board *Board) ShowBoard() {
 
 func (board *Board) pieceAt(pos uint8) string {
 
-	// White
-	if board.wP.BitSet(pos) {
-		return "P"
+	for k, v := range board.pcs {
+		if v.BitSet(pos) {
+			return k
+		}
 	}
-	if board.wR.BitSet(pos) {
-		return "R"
-	}
-	if board.wN.BitSet(pos) {
-		return "N"
-	}
-	if board.wB.BitSet(pos) {
-		return "B"
-	}
-	if board.wQ.BitSet(pos) {
-		return "Q"
-	}
-	if board.wK.BitSet(pos) {
-		return "K"
-	}
-
-	// Black
-	if board.bP.BitSet(pos) {
-		return "p"
-	}
-	if board.bR.BitSet(pos) {
-		return "r"
-	}
-	if board.bN.BitSet(pos) {
-		return "n"
-	}
-	if board.bB.BitSet(pos) {
-		return "b"
-	}
-	if board.bQ.BitSet(pos) {
-		return "q"
-	}
-	if board.bK.BitSet(pos) {
-		return "k"
-	}
-
 	return "."
 }
 
 func (board *Board) Init() {
 
+	board.pcs = make(map[string]*Bitboard)
+
+	for _, v := range pieces {
+		board.pcs[v] = new(Bitboard)
+		*board.pcs[v] = 0
+	}
+
 	LoadGame(board)
 	// saveGame(board)
+}
+
+func (board *Board) clearBits() {
+
+	for _, v := range pieces {
+		*board.pcs[v] = 0
+	}
+
 }

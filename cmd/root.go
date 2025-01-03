@@ -35,8 +35,7 @@ func HandleCMD() {
 
 	// fmt.Println(os.Args[1:])
 
-	command := os.Args[1]
-	args := os.Args[2:]
+	command, args := os.Args[1], os.Args[2:]
 
 	board := engine.Board{}
 	board.Init()
@@ -64,11 +63,9 @@ func HandleCMD() {
 func printHelp() {
 	fmt.Println(" Comandos disponibles:")
 	fmt.Println("   m <movimiento>         - Ejecuta el movimiento indicado, en notación estándar")
-	fmt.Println("   n {b,w}                - Reinicia la partida, indicando el color con el que se desea jugar")
+	fmt.Println("   n                      - Reinicia la partida")
 	fmt.Println("   s                      - Consulta el estado de la partida")
 	fmt.Println("   l <game>               - Carga una partida dada en notación FEN")
 	fmt.Println("   help                   - Muestra esta ayuda.")
-	fmt.Println("")
-	fmt.Println("")
 	fmt.Println("")
 }
