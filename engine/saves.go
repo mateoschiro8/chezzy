@@ -46,7 +46,7 @@ func SaveGame(board *Board, fen string) {
 }
 
 func LoadGame(board *Board) {
-	board.clearBits()
+	board.clearPieces()
 	dat, _ := os.ReadFile("save.fen")
 	save := string(dat)
 
@@ -67,10 +67,10 @@ func LoadGame(board *Board) {
 
 	}
 
-	board.wPieces = *board.pcs["P"] | *board.pcs["R"] | *board.pcs["N"] |
+	*board.colorPcs[White] = *board.pcs["P"] | *board.pcs["R"] | *board.pcs["N"] |
 		*board.pcs["B"] | *board.pcs["Q"] | *board.pcs["K"]
 
-	board.bPieces = *board.pcs["p"] | *board.pcs["r"] | *board.pcs["n"] |
+	*board.colorPcs[Black] = *board.pcs["p"] | *board.pcs["r"] | *board.pcs["n"] |
 		*board.pcs["b"] | *board.pcs["q"] | *board.pcs["k"]
 }
 

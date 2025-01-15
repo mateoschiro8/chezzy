@@ -5,9 +5,7 @@ import (
 	"strings"
 )
 
-// Funciones para decodificar la entrada y obtener el movimiento
-
-func DecodeMove(board *Board, move string) {
+func DecodeMove(board *Board, move string, player bool) (Move, bool) {
 
 	if len(move) < 3 {
 		move = "P" + move
@@ -19,14 +17,15 @@ func DecodeMove(board *Board, move string) {
 
 	fmt.Printf("Pieza %s, fila %d, columna %d \n", string(piece), row, col)
 
-	pos := (row-1)*8 + (col - 1)
+	pos := uint8((row-1)*8 + (col - 1))
 
 	// fmt.Println(pos)
 
-	if board.wPieces.BitSet(uint8(pos)) {
-		fmt.Println("Movimiento inválido")
-
+	if board.colorPcs[player].BitSet(pos) {
+		return NewMove(0, 0, 0, 0), false
 	}
 
 	board.ShowBoard()
+
+	return NewMove(0, pos, 0, 0), true
 }

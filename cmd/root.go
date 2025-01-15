@@ -44,7 +44,12 @@ func HandleCMD() {
 	case "help":
 		printHelp()
 	case "m":
-		engine.DecodeMove(&board, args[0])
+		move, ok := engine.DecodeMove(&board, args[0], engine.White)
+		if !ok {
+			fmt.Printf("Movimiento inválido")
+		} else {
+			board.MakeMove(move)
+		}
 	case "n":
 		engine.SaveGame(&board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
 		board.ShowBoard()

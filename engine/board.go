@@ -6,6 +6,11 @@ import (
 	"fmt"
 )
 
+const (
+	White bool = true
+	Black bool = false
+)
+
 var pieces = [13]string{"P", "R", "N", "B", "Q", "K",
 	"p", "r", "n", "b", "q", "k"}
 
@@ -14,8 +19,12 @@ var pieces = [13]string{"P", "R", "N", "B", "Q", "K",
 
 type Board struct {
 	// Pawn, Rook, kNight, Bishop, Queen, King
-	pcs              map[string]*Bitboard
-	wPieces, bPieces Bitboard
+	pcs      map[string]*Bitboard
+	colorPcs map[bool]*Bitboard
+}
+
+func (board *Board) MakeMove(move Move) {
+	fmt.Println("AAAAAA")
 }
 
 func (board *Board) ShowBoard() {
@@ -52,17 +61,23 @@ func (board *Board) Init() {
 
 	for _, v := range pieces {
 		board.pcs[v] = new(Bitboard)
-		*board.pcs[v] = 0
+
 	}
+
+	board.colorPcs[White] = new(Bitboard)
+	board.colorPcs[Black] = new(Bitboard)
+
+	board.clearPieces()
 
 	LoadGame(board)
 	// saveGame(board)
 }
 
-func (board *Board) clearBits() {
+func (board *Board) clearPieces() {
 
 	for _, v := range pieces {
 		*board.pcs[v] = 0
 	}
-
+	*board.colorPcs[White] = 0
+	*board.colorPcs[Black] = 0
 }
