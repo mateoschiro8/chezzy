@@ -58,6 +58,7 @@ func (board *Board) pieceAt(pos uint8) string {
 func (board *Board) Init() {
 
 	board.pcs = make(map[string]*Bitboard)
+	board.colorPcs = make(map[bool]*Bitboard)
 
 	for _, v := range pieces {
 		board.pcs[v] = new(Bitboard)
@@ -70,7 +71,6 @@ func (board *Board) Init() {
 	board.clearPieces()
 
 	LoadGame(board)
-	// saveGame(board)
 }
 
 func (board *Board) clearPieces() {

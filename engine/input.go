@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func DecodeMove(board *Board, move string, player bool) (Move, bool) {
+func DecodeMove(board *Board, move string, player bool) {
 
 	if len(move) < 3 {
 		move = "P" + move
@@ -17,15 +17,11 @@ func DecodeMove(board *Board, move string, player bool) (Move, bool) {
 
 	fmt.Printf("Pieza %s, fila %d, columna %d \n", string(piece), row, col)
 
-	pos := uint8((row-1)*8 + (col - 1))
+	var from uint8 = 2
+	to := uint8((row-1)*8 + (col - 1))
 
-	// fmt.Println(pos)
+	// fmt.Println(from, to)
 
-	if board.colorPcs[player].BitSet(pos) {
-		return NewMove(0, 0, 0, 0), false
-	}
+	ValidateMove(board, player, from, to, string(piece))
 
-	board.ShowBoard()
-
-	return NewMove(0, pos, 0, 0), true
 }
