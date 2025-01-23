@@ -57,34 +57,18 @@ func reachable(board *Board, piece string, toPos, toCol, toRow uint8, player boo
 		return 0, false
 	}
 
-	// Hay una pieza del otro jugador en la posición destino?
-	isCaptureMove := board.colorPcs[!player].BitSet(toPos)
-
 	switch piece {
-	case "P":
+	case Pawn:
+		return isReachableByPawn(board, player, toPos, toCol, toRow)
 
-		if !isCaptureMove {
+	case Rook:
+		return isReachableByRook(board, toCol, toRow)
 
-			colBits := uint64(*board.pcs["P"]) & cols[toCol]
-
-			// fmt.Printf("Binario: %b\n", colBits)
-			// fmt.Println(BitToSquare(Bitboard(colBits).Msb()))
-
-			PrintBoardBits(colBits)
-			fromPos := Bitboard(colBits).Msb()
-			fromRow := fromPos/8 + 1
-			fmt.Println("Fila origen:", fromRow)
-			fmt.Println("Fila destino:", toRow)
-
-			if !(toRow == 4 && fromRow == 2 || toRow == fromRow+1) {
-				return 0, false
-			}
-
-			return fromPos, true
-		} else {
-			fmt.Println("Es captura")
-			colBits := uint64(*board.pcs["P"]) & (cols[toCol-1] | cols[toCol+1])
-			PrintBoardBits(colBits)
+	case Bishop:
+		for i, v := range bishopAttacks {
+			fmt.Println(i)
+			PrintBoardBits(v)
+			fmt.Println()
 		}
 
 	}
@@ -92,36 +76,44 @@ func reachable(board *Board, piece string, toPos, toCol, toRow uint8, player boo
 	return 2, true
 }
 
-func BitToSquare(bitIndex uint8) string {
-	fmt.Println(bitIndex)
-	// Validar que el índice esté en el rango correcto
-	if bitIndex > 63 {
-		return "Índice de bit inválido"
+func isReachableByPawn(board *Board, player bool, toPos, toCol, toRow uint8) (uint8, bool) {
+
+	// Hay una pieza del otro jugador en la posición destino?
+	isCaptureMove := board.colorPcs[!player].BitSet(toPos)
+
+	var fromPos uint8
+	if !isCaptureMove {
+
+		colBits := uint64(*board.pcs[Pawn]) & cols[toCol]
+		fromPos = Bitboard(colBits).Msb()
+		fromRow := fromPos/8 + 1
+
+		if !(toRow == 4 && fromRow == 2 || toRow == fromRow+1) {
+			return 0, false
+		}
+
+	} else {
+
+		colBits := uint64(*board.pcs[Pawn]) & (cols[toCol-1] | cols[toCol+1])
+		finalBits := colBits & rows[toRow-1]
+
+		if finalBits == 0 {
+			return 0, false
+		}
+		fromPos = Bitboard(finalBits).Msb()
+
 	}
-
-	// Calcular la columna (A-H)
-	// La columna se obtiene con el módulo 8
-	column := rune('A' + (bitIndex % 8))
-
-	// Calcular la fila (1-8)
-	// La fila se obtiene dividiendo por 8 y sumando 1
-	// Invertimos la numeración para que el bit 0 sea A1 y el 63 sea H8
-	row := 8 - (bitIndex / 8)
-
-	// Convertir a notación de ajedrez
-	return fmt.Sprintf("%c%d", column, row)
+	return fromPos, true
 }
 
-func PrintBoardBits(board uint64) {
-	for i := 0; i < 8; i++ {
-		// Extraer los 8 bits correspondientes a cada fila
-		fila := (board >> (uint(i) * 8)) & 0xFF
+func isReachableByRook(board *Board, toCol, toRow uint8) (uint8, bool) {
 
-		// Imprimir cada bit de la fila de izquierda a derecha (columna A a la izquierda)
-		for j := 7; j >= 0; j-- {
-			bit := (fila >> uint(j)) & 1
-			fmt.Printf("%d", bit)
-		}
-		fmt.Println() // Salto de línea después de cada fila
+	attackBits := cols[toCol] | rows[toRow]
+	finalBits := uint64(*board.pcs[Rook]) & attackBits
+
+	if finalBits > 0 {
+		return Bitboard(finalBits).Msb(), true
 	}
+
+	return 0, false
 }

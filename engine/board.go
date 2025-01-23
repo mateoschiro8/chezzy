@@ -9,6 +9,13 @@ import (
 const (
 	White bool = true
 	Black bool = false
+
+	Pawn   string = "P"
+	Rook   string = "R"
+	Knight string = "N"
+	Bishop string = "B"
+	Queen  string = "Q"
+	King   string = "K"
 )
 
 var pieces = [13]string{"P", "R", "N", "B", "Q", "K",
