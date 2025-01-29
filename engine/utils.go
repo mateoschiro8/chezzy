@@ -22,6 +22,26 @@ func BitToSquare(bitIndex uint8) string {
 	return fmt.Sprintf("%c%d", column, row)
 }
 
+func PosToSquare(bitIndex uint8) (uint8, uint8) {
+
+	// Validar que el índice esté en el rango correcto
+	if bitIndex > 63 {
+		return 0, 0
+	}
+
+	// Calcular la columna (A-H)
+	// La columna se obtiene con el módulo 8
+	col := bitIndex%8 + 1
+
+	// Calcular la fila (1-8)
+	// La fila se obtiene dividiendo por 8 y sumando 1
+	// Invertimos la numeración para que el bit 0 sea A1 y el 63 sea H8
+	row := (bitIndex / 8) + 1
+
+	// Convertir a notación de ajedrez
+	return col, row
+}
+
 func PrintBoardBits(board uint64) {
 	for i := 0; i < 8; i++ {
 		// Extraer los 8 bits correspondientes a cada fila

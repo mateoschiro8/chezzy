@@ -5,6 +5,17 @@ import (
 	"strings"
 )
 
+const (
+	N  int8 = 8
+	S  int8 = -8
+	E  int8 = 1
+	W  int8 = -1
+	NE int8 = 9
+	SE int8 = -7
+	SW int8 = -9
+	NW int8 = 7
+)
+
 func DecodeMove(board *Board, move string, player bool) {
 
 	if len(move) < 3 {
@@ -62,10 +73,10 @@ func reachable(board *Board, piece string, toPos, toCol, toRow uint8, player boo
 		return isReachableByPawn(board, player, toPos, toCol, toRow)
 
 	case Rook:
-		return isReachableByRook(board, toCol, toRow)
+		return isReachableByRook(board, toPos, toCol, toRow)
 
 	case Bishop:
-		for i, v := range bishopAttacks {
+		for i, v := range SWNEDiags {
 			fmt.Println(i)
 			PrintBoardBits(v)
 			fmt.Println()
@@ -106,14 +117,77 @@ func isReachableByPawn(board *Board, player bool, toPos, toCol, toRow uint8) (ui
 	return fromPos, true
 }
 
-func isReachableByRook(board *Board, toCol, toRow uint8) (uint8, bool) {
+func isReachableByRook(board *Board, toPos, toCol, toRow uint8) (uint8, bool) {
 
 	attackBits := cols[toCol] | rows[toRow]
-	finalBits := uint64(*board.pcs[Rook]) & attackBits
+	rooks := uint64(*board.pcs[Rook]) & attackBits
 
-	if finalBits > 0 {
-		return Bitboard(finalBits).Msb(), true
+	if rooks == 0 {
+		return 0, false
+	}
+
+	occupied := uint64(*board.colorPcs[White] | *board.colorPcs[Black])
+
+	for rooks > 0 {
+
+		from := Bitboard(rooks).Msb()
+		rooks &= rooks - 1
+
+		ray := generateRay(from, toPos)
+		if ray&occupied == 0 {
+			return from, true
+		}
+
 	}
 
 	return 0, false
+}
+
+// Dadas dos posiciones (que están en alguna dirección), genera una mascara con todas
+// las posiciones que tienen en el medio (sin incluirlas)
+func generateRay(from, to uint8) uint64 {
+
+	var dir int8
+
+	colFrom, rowFrom := PosToSquare(from)
+	colTo, rowTo := PosToSquare(to)
+
+	switch {
+	case colFrom == colTo:
+		if rowFrom < rowTo {
+			dir = N
+		} else {
+			dir = S
+		}
+
+	case rowFrom == rowTo:
+		if colFrom < colTo {
+			dir = E
+		} else {
+			dir = S
+		}
+
+	case colFrom < colTo:
+		if rowFrom < rowTo {
+			dir = NE
+		} else {
+			dir = SE
+		}
+
+	case colFrom > colTo:
+		if rowFrom < rowTo {
+			dir = NW
+		} else {
+			dir = SW
+		}
+	}
+
+	ray := uint64(0)
+	sq := int8(from) + dir
+	for sq != int8(to) {
+		ray |= 1 << (63 - sq)
+		sq += dir
+	}
+
+	return ray
 }
