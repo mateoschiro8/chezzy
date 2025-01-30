@@ -73,18 +73,19 @@ func reachable(board *Board, piece string, toPos, toCol, toRow uint8, player boo
 		return isReachableByPawn(board, player, toPos, toCol, toRow)
 
 	case Rook:
-		return isReachableByRook(board, toPos, toCol, toRow)
+		return isReachableBy(board, Rook, toPos, cols[toCol]|rows[toRow])
 
 	case Bishop:
-		for i, v := range SWNEDiags {
-			fmt.Println(i)
-			PrintBoardBits(v)
-			fmt.Println()
-		}
+		return isReachableBy(board, Bishop, toPos, SENWDiags[toPos]|SWNEDiags[toPos])
 
+	case Queen:
+		return isReachableBy(board, Queen, toPos, cols[toCol]|rows[toRow]|SENWDiags[toPos]|SWNEDiags[toPos])
+
+	case King:
+		return isReachableBy(board, King, toPos, KingMoves[toPos])
 	}
 
-	return 2, true
+	return 0, false
 }
 
 func isReachableByPawn(board *Board, player bool, toPos, toCol, toRow uint8) (uint8, bool) {
@@ -117,23 +118,23 @@ func isReachableByPawn(board *Board, player bool, toPos, toCol, toRow uint8) (ui
 	return fromPos, true
 }
 
-func isReachableByRook(board *Board, toPos, toCol, toRow uint8) (uint8, bool) {
+func isReachableBy(board *Board, piece string, toPos uint8, attackBits uint64) (uint8, bool) {
 
-	attackBits := cols[toCol] | rows[toRow]
-	rooks := uint64(*board.pcs[Rook]) & attackBits
+	pieces := uint64(*board.pcs[piece]) & attackBits
 
-	if rooks == 0 {
+	if pieces == 0 {
 		return 0, false
 	}
 
 	occupied := uint64(*board.colorPcs[White] | *board.colorPcs[Black])
 
-	for rooks > 0 {
+	for pieces > 0 {
 
-		from := Bitboard(rooks).Msb()
-		rooks &= rooks - 1
+		from := Bitboard(pieces).Msb()
+		pieces &= pieces - 1
 
 		ray := generateRay(from, toPos)
+		// PrintBoardBits(ray)
 		if ray&occupied == 0 {
 			return from, true
 		}
@@ -164,7 +165,7 @@ func generateRay(from, to uint8) uint64 {
 		if colFrom < colTo {
 			dir = E
 		} else {
-			dir = S
+			dir = W
 		}
 
 	case colFrom < colTo:
