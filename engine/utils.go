@@ -1,6 +1,11 @@
 package engine
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"os/exec"
+	"runtime"
+)
 
 func BitToSquare(bitIndex uint8) string {
 	fmt.Println(bitIndex)
@@ -53,5 +58,19 @@ func PrintBoardBits(board uint64) {
 			fmt.Printf("%d", bit)
 		}
 		fmt.Println() // Salto de línea después de cada fila
+	}
+}
+
+// ClearScreen limpia la terminal
+func ClearScreen() {
+	switch runtime.GOOS {
+	case "windows":
+		cmd := exec.Command("cmd", "/c", "cls")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	default: // Linux o MacOS
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
 	}
 }

@@ -4,28 +4,12 @@ import (
 	"chezzy/engine"
 	"fmt"
 	"os"
-	"os/exec"
-	"runtime"
 	"strings"
 )
 
-// ClearScreen limpia la terminal
-func ClearScreen() {
-	switch runtime.GOOS {
-	case "windows":
-		cmd := exec.Command("cmd", "/c", "cls")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
-	default: // Linux o MacOS
-		cmd := exec.Command("clear")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
-	}
-}
-
 func HandleCMD() {
 
-	ClearScreen()
+	engine.ClearScreen()
 
 	if len(os.Args) < 2 {
 		fmt.Println(" Bienvenido a chezzy!")
@@ -39,24 +23,35 @@ func HandleCMD() {
 
 	board := engine.Board{}
 	board.Init()
+	engine.LoadGame(&board)
 
 	switch command {
 	case "help":
 		printHelp()
 	case "m":
-		engine.DecodeMove(&board, args[0], engine.White)
+		move, piece, ok := engine.DecodeMove(&board, args[0], engine.White)
+		if ok {
+			board.MakeMove(move, piece, engine.White)
+		} else {
+			fmt.Println("a")
+		}
+		board.ShowBoard()
 	case "n":
 		engine.SaveGame(&board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+		engine.LoadGame(&board)
 		board.ShowBoard()
 	case "s":
 		board.ShowBoard()
 	case "l":
 		engine.SaveGame(&board, strings.Join(args, " "))
+		engine.LoadGame(&board)
 		board.ShowBoard()
 	default:
 		fmt.Printf(" Comando desconocido: %s\n", command)
 		printHelp()
 	}
+
+	engine.SaveGame(&board, "")
 }
 
 // Muestra la ayuda

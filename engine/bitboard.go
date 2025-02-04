@@ -20,7 +20,7 @@ func (bitboard *Bitboard) SetBit(sq uint8) {
 }
 
 func (bitboard *Bitboard) ClearBit(sq uint8) {
-	*bitboard &= 0x8000000000000000 >> sq
+	*bitboard &= ^(0x8000000000000000 >> sq)
 }
 
 func (bb Bitboard) BitSet(sq uint8) bool {

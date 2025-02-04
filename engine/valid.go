@@ -1,11 +1,7 @@
 package engine
 
-func ValidateMove(board *Board, player bool, from, to uint8, piece string) {
+func ValidateMove(board *Board, player bool, from, to uint8, piece string) (Move, string, bool) {
 
-	if board.colorPcs[player].BitSet(to) {
-
-	}
-
-	// NewMove(from, to, 0, 0), true
+	return NewMove(from, to, 0, 0), piece, true
 
 }

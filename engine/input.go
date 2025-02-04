@@ -16,7 +16,7 @@ const (
 	NW int8 = 7
 )
 
-func DecodeMove(board *Board, move string, player bool) {
+func DecodeMove(board *Board, move string, player bool) (Move, string, bool) {
 
 	if len(move) < 3 {
 		move = "P" + move
@@ -34,12 +34,12 @@ func DecodeMove(board *Board, move string, player bool) {
 
 	if !ok {
 		fmt.Println("Movimiento erróneo")
-		return
+		return NewMove(0, 0, 0, 0), " ", false
 	}
 
 	// fmt.Println(from, to)
 
-	ValidateMove(board, player, from, to, piece)
+	return ValidateMove(board, player, from, to, piece)
 
 }
 

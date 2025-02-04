@@ -30,13 +30,19 @@ type Board struct {
 	colorPcs map[bool]*Bitboard
 }
 
-func (board *Board) MakeMove(move Move) {
-	fmt.Println("AAAAAA")
+func (board *Board) MakeMove(move Move, piece string, player bool) {
+
+	from, to := move.From(), move.To()
+
+	board.colorPcs[player].ClearBit(from)
+	board.colorPcs[player].SetBit(to)
+
+	board.pcs[piece].ClearBit(from)
+	board.pcs[piece].SetBit(to)
+
 }
 
 func (board *Board) ShowBoard() {
-
-	LoadGame(board)
 
 	boardAsString := "\n"
 	for i := 8; i > 0; i-- {
