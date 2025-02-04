@@ -43,24 +43,6 @@ func DecodeMove(board *Board, move string, player bool) (Move, string, bool) {
 
 }
 
-/*
-	Peon: el que esté en la misma columna. Si el movimiento es 2 mas de donde está ahora, el peón tiene que estar
-	en la fila inicial
-
-	Caballo: Hacer un and de los bits de los caballos con todos los posibles lugares donde podría salir un caballo
-	para llegar a esa posición, y agarrar el que esté más a la izquierda
-
-	Alfil: mismo que con caballo
-
-	Torre: mismo que con caballo
-
-	Reina: mismo que con caballo. Se puede hacer mezclando torre + alfil
-
-	Rey: mismo que con caballo
-
-
-*/
-
 func reachable(board *Board, piece string, toPos, toCol, toRow uint8, player bool) (uint8, bool) {
 
 	// Si hay una pieza del mismo jugador en esa posición
@@ -74,6 +56,9 @@ func reachable(board *Board, piece string, toPos, toCol, toRow uint8, player boo
 
 	case Rook:
 		return isReachableBy(board, Rook, toPos, cols[toCol]|rows[toRow])
+
+	case Knight:
+		return isReachableByKnight(board, player, toPos)
 
 	case Bishop:
 		return isReachableBy(board, Bishop, toPos, SENWDiags[toPos]|SWNEDiags[toPos])
@@ -116,6 +101,18 @@ func isReachableByPawn(board *Board, player bool, toPos, toCol, toRow uint8) (ui
 
 	}
 	return fromPos, true
+}
+
+func isReachableByKnight(board *Board, player bool, toPos uint8) (uint8, bool) {
+
+	pieces := uint64(*board.pcs[Knight]) & KnightMoves[toPos]
+
+	if pieces == 0 {
+		return 0, false
+	}
+
+	from := Bitboard(pieces).Msb()
+	return from, true
 }
 
 func isReachableBy(board *Board, piece string, toPos uint8, attackBits uint64) (uint8, bool) {
